@@ -1,12 +1,14 @@
 import { Inertia } from "@inertiajs/inertia"
 import { InertiaLink } from "@inertiajs/inertia-react"
-import React, { useState } from "react"
+import React, { Fragment, useState } from "react"
 import Layout from "../../../components/common/layout"
+import LatestPages from "../../../components/webpages/LatestPages"
 
 const Add = ({ errors, webPages }) => {
   const [state, setState] = useState({
     link: "",
-    title: "Some title"
+    title: "Some title",
+    isLoading: false
   })
 
   const handleChange = e => {
@@ -16,7 +18,14 @@ const Add = ({ errors, webPages }) => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    Inertia.post("/web-pages/preview", state)
+    Inertia.post("/web-pages/preview", state, {
+      onStart: () => {
+        setState({ ...state, isLoading: true })
+      },
+      onFinish: () => {
+        setState({ ...state, isLoading: false })
+      }
+    })
   }
 
   return (
@@ -37,8 +46,24 @@ const Add = ({ errors, webPages }) => {
                       onChange={handleChange}
                     />
                   </div>
-                  <button className="btn btn-success ml-2" type="submit">
-                    Add
+                  <button
+                    className="btn btn-success ml-2 d-flex align-items-center justify-content-center"
+                    type="submit"
+                    disabled={state.isLoading}
+                  >
+                    {state.isLoading ? (
+                      <div className="d-flex align-items-center">
+                        <div
+                          className="spinner-border text-white spinner-border-sm"
+                          role="status"
+                        >
+                          <span className="visually-hidden"></span>
+                        </div>
+                        <span className="ml-2">Please wait...</span>
+                      </div>
+                    ) : (
+                      "Add"
+                    )}
                   </button>
                 </div>
                 <span className="text-danger">{errors && errors.link}</span>
@@ -47,26 +72,7 @@ const Add = ({ errors, webPages }) => {
           </form>
         </div>
         <div className="col-md-4">
-          <div className="card">
-            <div className="card-header">Latest webpages</div>
-            <div className="card-body">
-              <ul className="list-group">
-                {webPages &&
-                  webPages.map((page, index) => (
-                    <li className="list-group-item" key={index}>
-                      <div className="d-flex justify-content-between">
-                        <InertiaLink href={`/web-pages/view/${page.id}`}>
-                          {page.title}
-                        </InertiaLink>
-                        {/* <button className="btn btn-danger btn-sm">
-                          Remove
-                        </button> */}
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </div>
+          <LatestPages webPages={webPages} />
         </div>
       </div>
     </Layout>

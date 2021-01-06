@@ -28,14 +28,6 @@ const Nav = () => {
                 Add New
               </InertiaLink>
             </li>
-            {/* <li className="nav-item">
-              <InertiaLink
-                className="nav-link"
-                href={route("bookmark.add").url()}
-              >
-                Bookmark add
-              </InertiaLink>
-            </li> */}
           </ul>
 
           <ul className="navbar-nav ml-auto">
@@ -58,6 +50,7 @@ const Nav = () => {
               >
                 <InertiaLink
                   method="post"
+                  as="button"
                   href="/logout"
                   className="dropdown-item"
                 >

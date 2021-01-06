@@ -19,4 +19,6 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::post('/web-pages/preview', [WebPagesController::class, 'getPreviewData'])->name('web-pages-preview');
     Route::post('/web-pages/make-active', [WebPagesController::class, 'makeActive'])->name('web-pages-make-active');
+
+    Route::post('/web-pages/delete', [WebPagesController::class, 'destory'])->name('web-pages-delete');
 });

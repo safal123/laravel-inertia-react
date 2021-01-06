@@ -1,6 +1,7 @@
-import { InertiaLink } from "@inertiajs/inertia-react"
 import React from "react"
 import Layout from "../../../components/common/layout"
+import LatestPages from "../../../components/webpages/LatestPages"
+import WebPageListItems from "../../../components/webpages/WebPageListItems"
 
 const WebPageList = ({ webPages }) => {
   return (
@@ -10,17 +11,12 @@ const WebPageList = ({ webPages }) => {
           <ul className="list-group">
             {webPages &&
               webPages.map((page, index) => (
-                <li className="list-group-item" key={index}>
-                  <div className="d-flex justify-content-between">
-                    <InertiaLink href={`/web-pages/view/${page.id}`}>
-                      {page.title}
-                    </InertiaLink>
-                    {/* <span>{page.is_active}</span> */}
-                    <button className="btn btn-danger btn-sm">Remove</button>
-                  </div>
-                </li>
+                <WebPageListItems key={index} page={page} />
               ))}
           </ul>
+        </div>
+        <div className="col-md-4">
+          <LatestPages webPages={webPages} />
         </div>
       </div>
     </Layout>

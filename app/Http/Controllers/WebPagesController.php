@@ -13,8 +13,10 @@ class WebPagesController extends Controller
     {
         $webPages = WebPage::query()
                     ->where('user_id', Auth::user()->id)
+                    ->where('is_active', 1)
                     ->orderBy('id', 'desc')
                     ->get();
+
         return Inertia::render('WebPage/List/index', [
             'webPages' => $webPages
         ]);
@@ -25,6 +27,7 @@ class WebPagesController extends Controller
         $webPages = WebPage::query()
                     ->where('user_id', Auth::user()->id)
                     ->orderBy('id', 'desc')
+                    ->where('is_active', 1)
                     ->take(5)
                     ->get();
         return Inertia::render('WebPage/Add/index', [
@@ -60,9 +63,11 @@ class WebPagesController extends Controller
         }
         $webPages = WebPage::query()
                     ->where('user_id', Auth::user()->id)
+                    ->where('is_active', 1)
                     ->orderBy('id', 'desc')
                     ->take(5)
                     ->get();
+
         return Inertia::render('WebPage/View/index', [
             'webpage' => $webPage,
             'webPages' => $webPages
@@ -75,7 +80,17 @@ class WebPagesController extends Controller
         $webPage->is_active = 1;
         $webPage->save();
         return redirect()->route('web-pages');
+    }
 
+    public function destory(Request $request)
+    {
+        $webPage = WebPage::findOrFail($request->id);
 
+        if ((string)Auth::user()->id !== $webPage->user_id) {
+            abort(401, 'You are not allowed to view this bookmark');
+        }
+        $webPage->delete();
+        
+        return redirect()->route('web-pages');
     }
 }
