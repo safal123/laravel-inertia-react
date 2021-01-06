@@ -16,8 +16,13 @@ class CreateWebPagesTable extends Migration
         Schema::create('web_pages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('description')->nullable();
+            $table->string('type')->nullable();
+            $table->string('url');
+            $table->string('image_url');
+            $table->string('image_secure_url')->nullable();
             $table->foreignId('user_id');
-            $table->text('url');
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

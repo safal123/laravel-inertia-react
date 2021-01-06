@@ -24,6 +24,7 @@ class WebPageFactory extends Factory
         return [
             'title' => $this->faker->word(),
             'url' => $this->faker->url,
+            'image_url' => $this->faker->imageUrl(600, 400),
             'user_id' => 1
         ];
     }
